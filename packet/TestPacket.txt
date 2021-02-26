@@ -1,0 +1,112 @@
+//测试发送消息
+cg message CGTest
+{
+	id = 2001 //消息id
+	dir = Test //生成文件夹
+	
+	struct item //item结构
+	{
+		int id
+		char[10] name
+	}
+	
+	struct equip //equip结构,二层嵌套
+	{
+		int equipId
+		int itemLen
+		item[itemLen] equipItem //item的不定长数组
+	}
+	
+	struct player //player结构，三层嵌套
+	{
+		equip mainEquip
+		int[4] objIds //结构内的int数组
+		int equipLen
+		equip[equipLen] equipList //equip的不定长数组
+	}
+	
+	int index = 100 //int
+	int[10] indexArray //定长int数组
+	char[30] name = "hello" //定长字符串
+	int playerLen = 3
+	player[playerLen] playerList2 //不定长player数组
+}
+
+//测试返回消息
+gc message GCTest
+{
+	id = 2002
+	dir = Test
+	
+	struct item //item结构
+	{
+		int id
+		char[10] name
+		bool isBind
+	}
+	
+	struct equip //equip结构,二层嵌套
+	{
+		int equipId
+		int itemLen
+		item[itemLen] equipItem //item的不定长数组
+	}
+	
+	struct player //player结构，三层嵌套
+	{
+		equip mainEquip
+		int[4] objIds //结构内的int数组
+		int equipLen
+		equip[equipLen] equipList //equip的不定长数组
+	}
+	
+	int index = 100 //int
+	int[10] indexArray //定长int数组
+	int indexLen
+	int[indexLen] indexArray2 //不定长int数组
+	
+	short	 shortData
+	ushort	 ushortData
+	int64	 int64Data
+	uint64	 uint64Data
+	byte	 byteData
+	float	 floatData
+	double	 doubleData
+	bool	 boolData
+	
+	short[1]	 shortData
+	ushort[2]	 ushortData
+	int64[3]	 int64Data
+	uint64[4]	 uint64Data
+	
+	
+	int byteLen
+	byte[byteLen]	 byteData
+	
+	int floatLen
+	float[floatLen]	 floatData
+	
+	int doubleLen
+	double[doubleLen]	 doubleData
+	
+	int boolLen
+	bool[boolLen]	 boolData
+	
+	char[30] name = "hello" //定长字符串
+	int nameLen = 10
+	char[nameLen] name2 //不定长字符串
+	
+	item oneItem //单一item
+	equip oneEquip //单一equip
+	player onePlayer //单一player
+	item[5] itemList1 //定长item数组
+	int itemLen
+	item[itemLen] itemList2 //不定长item数组
+	equip[6] equipList1 //定长equip数组
+	int equipLen
+	equip[equipLen] equipList2 //不定长equip数组
+	
+	player[7] playerList1 //定长player数组
+	int playerLen = 3
+	player[playerLen] playerList2 //不定长player数组
+}

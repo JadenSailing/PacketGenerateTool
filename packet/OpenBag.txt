@@ -1,0 +1,18 @@
+//扩展背包格子
+cg message CGOpenMyBag
+{
+	author = "LiuZhen"
+	id = 153 //消息id
+	dir = "Packet/Request" //生成文件夹
+}
+
+//扩展背包格子返回
+gc message GCOpenMyBag
+{
+	author = "LiuZhen"
+	id = 154
+	dir = "Packet/Response"
+	
+	byte	curOpenNum //当前开放的格子数
+	byte	maxOpenNum //最大开放的格子数
+}
