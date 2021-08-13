@@ -4,7 +4,7 @@
 
 import os
 import time
-from Const import *
+from .Const import *
 def is_number(s):
     try:
         float(s)

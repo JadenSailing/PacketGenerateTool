@@ -3,11 +3,12 @@
 # PacketGenerator
 
 import os
-from Parser import *
-from Const import *
-from LuaPacketoutput import *
+from .Parser import *
+from .Const import *
+from .LuaPacketoutput import *
 
-def exportPacketList():
+def exportPacketList(cfg):
+	outputDir = cfg.get("Global", "OutPutDir")
 	packetDirPath = os.path.join(Const.ParentDir, Const.PacketPath)
 	if(not os.path.exists(packetDirPath)):
 		print("packet config dir not exist!")
@@ -38,11 +39,13 @@ def exportPacketList():
 			pLua = LuaPacketOutput(item)
 			output = pLua.generateOutput()
 			print("\tmessage " + item.name)
-			outDir = "" 
+			outDir = ""
 			if(len(item.dir) > 0):
-				outDir = os.path.join(Const.ParentDir, Const.OutputPath, item.dir)
+				outDir = os.path.join(outputDir, item.dir)
+				#需要逐层添加路径
+				Util.CreateDirRecusive(outDir)
 			else:
-				outDir = os.path.join(Const.ParentDir, Const.OutputPath)
+				outDir = os.path.join(outputDir)
 
 			if(not os.path.exists(outDir)):
 				os.mkdir(outDir)
@@ -50,6 +53,3 @@ def exportPacketList():
 				file.write(output)
 
 	print("complete! file num = %s, message num = %s" % (len(validFiles), pNum))
-
-exportPacketList()
-			

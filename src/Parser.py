@@ -5,8 +5,8 @@
 import os
 import time
 from io import StringIO
-from Const import *
-from Lexer import *
+from .Const import *
+from .Lexer import *
 
 '''
 //测试发送消息

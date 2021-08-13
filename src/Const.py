@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 # Const
 
+from genericpath import exists
+import os
+
 class Const(object):
     ParentDir = ""
     PacketPath = "packet"
@@ -86,3 +89,14 @@ class Util(object):
             if(dict["type"] == type or dict["aType"] == type):
                 return dict
         return None
+
+    def CreateDirRecusive(dir):
+        dir = str.replace(dir, "\\", "/")
+        lastIndex = dir.rfind("/")
+        if(lastIndex > -1):
+            dirPre = dir[:lastIndex]
+            Util.CreateDirRecusive(dirPre)
+            pass
+        if(not os.path.exists(dir)):
+            os.mkdir(dir)
+        pass

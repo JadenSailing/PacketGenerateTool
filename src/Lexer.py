@@ -5,7 +5,7 @@
 import os
 import time
 from io import StringIO
-from Const import *
+from .Const import *
 
 '''
 //测试消息
