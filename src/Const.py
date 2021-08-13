@@ -6,6 +6,7 @@ from genericpath import exists
 import os
 
 class Const(object):
+    Cfg = None
     ParentDir = ""
     PacketPath = "packet"
     OutputPath = "output"

@@ -7,7 +7,8 @@ from .Parser import *
 from .Const import *
 from .LuaPacketoutput import *
 
-def exportPacketList(cfg):
+def exportPacketList():
+	cfg = Const.Cfg
 	outputDir = cfg.get("Global", "OutPutDir")
 	packetDirPath = os.path.join(Const.ParentDir, Const.PacketPath)
 	if(not os.path.exists(packetDirPath)):

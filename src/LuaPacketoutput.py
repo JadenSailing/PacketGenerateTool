@@ -288,6 +288,7 @@ class LuaPacketOutput(object):
         outStrList = []
 
         #packet comment
+        outStrList.append(Const.Comment_Lua_Str + Const.Cfg.get("Global", "Comment"))
         outStrList.append(Const.Comment_Lua_Str + self.packet.name)
         outStrList.append(Const.Comment_Lua_Str + "Date " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         outStrList.append(Const.Comment_Lua_Str + "Author " + self.packet.author)

@@ -13,4 +13,5 @@ outputDir = cfg.get("Global", "OutPutDir")
 print("outputDir = " + outputDir)
 if(not os.path.exists(outputDir)):
     raise("outputDir not exists!")
-exportPacketList(cfg)
+Const.Cfg = cfg
+exportPacketList()
