@@ -44,7 +44,7 @@ def exportPacketList():
 			if(len(item.dir) > 0):
 				outDir = os.path.join(outputDir, item.dir)
 				#需要逐层添加路径
-				Util.CreateDirRecusive(outDir)
+				Util.CreateDirRecursive(outDir)
 			else:
 				outDir = os.path.join(outputDir)
 

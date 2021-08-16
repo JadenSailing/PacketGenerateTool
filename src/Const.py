@@ -91,12 +91,12 @@ class Util(object):
                 return dict
         return None
 
-    def CreateDirRecusive(dir):
+    def CreateDirRecursive(dir):
         dir = str.replace(dir, "\\", "/")
         lastIndex = dir.rfind("/")
         if(lastIndex > -1):
             dirPre = dir[:lastIndex]
-            Util.CreateDirRecusive(dirPre)
+            Util.CreateDirRecursive(dirPre)
             pass
         if(not os.path.exists(dir)):
             os.mkdir(dir)
