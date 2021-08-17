@@ -15,13 +15,17 @@ gc message GCChongLouRet
 	id = 3109 //消息id
 	dir = "Packet/Response/ChongLou" //生成文件夹
 	int operateType = 0 //操作类型（1=打造）
+
 	case operateType 1 //类型1
 		int equipPos = 0 //装备位
 	endcase
+	int result = 0
 	case operateType 2
 		int equipPos = 0 //装备位
 		int equipPos2 = 0 //装备位
 	endcase
+	
 	case operateType 3
 	endcase
+	
 }
