@@ -249,7 +249,9 @@ class LuaPacketOutput(object):
         for attribute in self.packet.attributes:
             outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateWrite(Const.Table_Str))
 
-        outStrList.append(Const.Table_Str + "AddWatch(" + self.packet.author + ")")
+        outStrList.append(Const.Table_Str + "if(AddWatch ~= nil) then")
+        outStrList.append(Const.Table_Str + Const.Table_Str + "AddWatch(" + self.packet.author + ")")
+        outStrList.append(Const.Table_Str + "end")
 
         outStrList.append("end\n")
 
@@ -272,6 +274,10 @@ class LuaPacketOutput(object):
         outStrList.append("function %s:ReadStream()" % (self.packet.name))
         for attribute in self.packet.attributes:
             outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateRead(Const.Table_Str))
+
+        outStrList.append(Const.Table_Str + "if(AddWatch ~= nil) then")
+        outStrList.append(Const.Table_Str + Const.Table_Str + "AddWatch(" + self.packet.author + ")")
+        outStrList.append(Const.Table_Str + "end")
         outStrList.append("end\n")
 
         #处理

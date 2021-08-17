@@ -7,3 +7,13 @@ cg message CGChongLou
 	int operateType = 0 //操作类型（1=打造）
 	int equipPos = 0 //装备位
 }
+
+//重楼返回 测试
+gc message GCChongLouRet
+{
+	author = "LiuZhen"
+	id = 3109 //消息id
+	dir = "Packet/Response/ChongLou" //生成文件夹
+	int operateType = 0 //操作类型（1=打造）
+	int equipPos = 0 //装备位
+}
