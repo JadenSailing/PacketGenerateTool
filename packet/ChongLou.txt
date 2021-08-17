@@ -1,0 +1,9 @@
+//重楼装备操作
+cg message CGChongLou
+{
+	author = "LiuZhen"
+	id = 3108 //消息id
+	dir = "Packet/Request/ChongLou" //生成文件夹
+	int operateType = 0 //操作类型（1=打造）
+	int equipPos = 0 //装备位
+}

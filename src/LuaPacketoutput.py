@@ -249,15 +249,19 @@ class LuaPacketOutput(object):
         for attribute in self.packet.attributes:
             outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateWrite(Const.Table_Str))
 
+        outStrList.append(Const.Table_Str + "AddWatch(" + self.packet.author + ")")
+
         outStrList.append("end\n")
 
         outStrList.append("return " + self.packet.name)
+        
 
         outStr = ""
         for i in range(len(outStrList)):
             outStr = outStr + outStrList[i]
             if(i < len(outStrList) - 1):
                 outStr = outStr + Const.New_Line_Str
+        
         return outStr
 
     def generateOutputGC(self):
