@@ -241,8 +241,10 @@ class JPacket(object):
 	def parsePacketAttributes(self):
 		tword = self.nextword()
 		attributeList = []
+		inCase = False
 		while(not self.isEnd()):
 			attribute = JPacketAttribute()
+			attribute.inCase = inCase
 			attribute.dataType = Const.Packet_Attribute_Type_invalid
 			if(tword.type != Const.Word_Type_Comment):
 				commonData = Util.GetCommonDataBySymbol(tword.content)
@@ -286,6 +288,19 @@ class JPacket(object):
 							self.backword()
 				elif(tword.content == "}"):
 					break
+				elif(tword.content == "case"):
+					#case条件判定
+					attribute.dataType = Const.Packet_Attribute_Type_Case_Start
+					attribute.dataName = self.nextword().content
+					attribute.dataValue = self.nextword().content
+					inCase = True
+					pass
+				elif(tword.content == "endcase"):
+					#case条件判定
+					attribute.dataType = Const.Packet_Attribute_Type_Case_End
+					inCase = False
+					attribute.inCase = False
+					pass
 				else:
 					#此处可能是自定义结构
 					struct = self.currentItem.getStructByName(tword.content)

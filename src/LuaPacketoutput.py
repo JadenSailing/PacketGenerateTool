@@ -205,6 +205,12 @@ class LuaPacketAttributeOutput(object):
                 outStrList.append(prefix + "self.%s = self:ReadString(%s)" % (self.attribute.dataName, self.attribute.arraySize))
             else:
                 outStrList.append(prefix + "self.%s = self:ReadString(self.%s)" % (self.attribute.dataName, self.attribute.arraySize))
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_Start):
+            outStrList.append(Const.Table_Str + "if self.%s == %s then" % (self.attribute.dataName, self.attribute.dataValue))
+            pass
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_End):
+            outStrList.append(Const.Table_Str + "end")
+            pass
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_struct):
             outStrList.append(LuaPacketStructOutput(self.attribute, self.packetItem).generateRead(prefix, self.attribute.dataName, 0))
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_structArray):
@@ -273,7 +279,10 @@ class LuaPacketOutput(object):
         #读取
         outStrList.append("function %s:ReadStream()" % (self.packet.name))
         for attribute in self.packet.attributes:
-            outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateRead(Const.Table_Str))
+            prefix = Const.Table_Str
+            if(attribute.inCase):
+                prefix = Const.Table_Str + Const.Table_Str
+            outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateRead(prefix))
 
         outStrList.append(Const.Table_Str + "if(AddWatch ~= nil) then")
         outStrList.append(Const.Table_Str + Const.Table_Str + "AddWatch(" + self.packet.author + ")")

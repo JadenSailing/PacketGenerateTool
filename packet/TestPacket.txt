@@ -96,10 +96,15 @@ gc message GCTest
 	int nameLen = 10
 	char[nameLen] name2 //不定长字符串
 	
-	item oneItem //单一item
-	equip oneEquip //单一equip
-	player onePlayer //单一player
-	item[5] itemList1 //定长item数组
+	int opType = 0
+	case opType 1
+		item oneItem //单一item
+		equip oneEquip //单一equip
+		player onePlayer //单一player
+	endcase
+	case opType 2
+		item[5] itemList1 //定长item数组
+	endcase
 	int itemLen
 	item[itemLen] itemList2 //不定长item数组
 	equip[6] equipList1 //定长equip数组

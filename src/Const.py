@@ -54,6 +54,9 @@ class Const(object):
     Packet_Attribute_Type_byte = 22         #
     Packet_Attribute_Type_byteArray = 23    #
     Packet_Attribute_Type_int64Array = 24   #
+    #特殊属性 Case条件
+    Packet_Attribute_Type_Case_Start = 25
+    Packet_Attribute_Type_Case_End = 26
     
 
     
