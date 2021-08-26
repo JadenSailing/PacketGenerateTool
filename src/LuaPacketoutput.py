@@ -76,21 +76,21 @@ class LuaPacketStructOutput(object):
             commonData = Util.GetCommonDataByType(attribute.dataType)
             if(commonData != None):
                 if(commonData["type"] == attribute.dataType):
-                    outStrList.append(prefix + "self.%s = self.%s()" % (attributePrefix + "." + attribute.dataName, commonData["read"]))
+                    outStrList.append(prefix + "self.%s = self:%s()" % (attributePrefix + "." + attribute.dataName, commonData["read"]))
                 else:
                     if(is_number(attribute.arraySize)):
                         outStrList.append(prefix + "for %s = 1, %s do" % (Const.Index_List[listIndex], attribute.arraySize))
-                        outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self.%s()" % (attributePrefix + "." + attribute.dataName, Const.Index_List[listIndex], commonData["read"]))
+                        outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:%s()" % (attributePrefix + "." + attribute.dataName, Const.Index_List[listIndex], commonData["read"]))
                         outStrList.append(prefix + "end")
                     else:
                         outStrList.append(prefix + "for %s = 1, self.%s do" % (Const.Index_List[listIndex], attribute.arraySize))
-                        outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self.%s()" % (attributePrefix + "." + attribute.dataName, Const.Index_List[listIndex], commonData["read"]))
+                        outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:%s()" % (attributePrefix + "." + attribute.dataName, Const.Index_List[listIndex], commonData["read"]))
                         outStrList.append(prefix + "end")
             elif(attribute.dataType == Const.Packet_Attribute_Type_charArray):
                 if(is_number(attribute.arraySize)):
-                    outStrList.append(prefix + "self.%s = self.ReadString(%s)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                    outStrList.append(prefix + "self.%s = self:ReadString(%s)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
                 else:
-                    outStrList.append(prefix + "self.%s = self.ReadString(self.%s)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                    outStrList.append(prefix + "self.%s = self:ReadString(self.%s)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
             elif(attribute.dataType == Const.Packet_Attribute_Type_struct):
                 outStrList.append(LuaPacketStructOutput(attribute, self.packetItem).generateRead(prefix, attributePrefix + "." + attribute.dataName, listIndex))
             elif(attribute.dataType == Const.Packet_Attribute_Type_structArray):
@@ -309,7 +309,7 @@ class LuaPacketOutput(object):
         #packet comment
         outStrList.append(Const.Comment_Lua_Str + Const.Cfg.get("Global", "Comment"))
         outStrList.append(Const.Comment_Lua_Str + self.packet.name)
-        outStrList.append(Const.Comment_Lua_Str + "Date " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        #outStrList.append(Const.Comment_Lua_Str + "Date " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         outStrList.append(Const.Comment_Lua_Str + "Author " + self.packet.author)
         outStrList.append("")
 

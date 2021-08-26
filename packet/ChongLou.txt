@@ -4,28 +4,24 @@ cg message CGChongLou
 	author = "LiuZhen"
 	id = 3108 //消息id
 	dir = "Packet/Request/ChongLou" //生成文件夹
-	int operateType = 0 //操作类型（1=打造）
+	int operateType = 0 //操作类型（0=查询列表，1=打造， 2=觉醒， 3=继承）
 	int equipPos = 0 //装备位
+	int bagPos = 0 //背包位 继承时使用
 }
 
-//重楼返回 测试
-gc message GCChongLouRet
+//重楼返回
+gc message GCChongLou
 {
 	author = "LiuZhen"
-	id = 3109 //消息id
+	id = 3119 //消息id
 	dir = "Packet/Response/ChongLou" //生成文件夹
-	int operateType = 0 //操作类型（1=打造）
-
-	case operateType 1 //类型1
-		int equipPos = 0 //装备位
-	endcase
-	int result = 0
-	case operateType 2
-		int equipPos = 0 //装备位
-		int equipPos2 = 0 //装备位
-	endcase
+	struct info
+	{
+		byte equipPos
+		byte state
+	}
+	int syncType = 0 //推送原因（0=查询列表，1=打造，2=觉醒，3=继承）
+	byte listCount = 0 //返回的装备个数，如果是更新可能只有一个
 	
-	case operateType 3
-	endcase
-	
+	info[listCount] listArray //返回的装备详细信息
 }
