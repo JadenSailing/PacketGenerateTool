@@ -30,7 +30,7 @@ def exportPacketList():
 	with open(filePath, "r", encoding="utf-8") as file:
 		content = file.read()
 	Const.PacketDefine.Parse(content)
-	print("cg chonglou id = " + Const.PacketDefine.getPacketID("CGChongLou"))
+	#print("cg chonglou id = " + Const.PacketDefine.getPacketID("CGChongLou"))
 
 	fNum = 0
 	pNum = 0

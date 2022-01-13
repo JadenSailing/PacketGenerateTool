@@ -109,7 +109,7 @@ class JPacket(object):
 	
 	def raiseError(self, errorStr):
 		word = self.lexer.wordList[self.wordIndex]
-		raise ValueError(errorStr + "[line]: " + str(word.line) + ", offset = " + str(word.lineoffset) + ",[file]: " + self.fileName)
+		raise ValueError(errorStr + " [line]: " + str(word.line) + ", offset = " + str(word.lineoffset) + ",[file]: " + self.fileName)
 	
 	def nextword(self):
 		self.wordIndex = self.wordIndex + 1
@@ -262,6 +262,16 @@ class JPacket(object):
 					if(nextword.content == "["):
 						attribute.dataType = commonData["aType"]
 						attribute.arraySize = self.nextword().content
+						if(not is_number(attribute.arraySize)):
+							#非固定数字长度数组 检测一下变量是否合法
+							isArraySizeValid = False
+							for attr in attributeList:
+								if(attr.dataName == attribute.arraySize):
+									isArraySizeValid = True
+									break
+							if(not isArraySizeValid):
+								self.raiseError("array size not valid, no such variable " + attribute.arraySize)
+
 						nextword = self.nextword()
 						if(nextword.content != "]"):
 							self.raiseError("syntax error, require \"]\", find " + nextword.content)
@@ -320,6 +330,16 @@ class JPacket(object):
 							attribute.dataType = Const.Packet_Attribute_Type_structArray
 							attribute.dataStructName = tword.content
 							attribute.arraySize = self.nextword().content
+							if(not is_number(attribute.arraySize)):
+								#非固定数字长度数组 检测一下变量是否合法
+								isArraySizeValid = False
+								for attr in attributeList:
+									if(attr.dataName == attribute.arraySize):
+										isArraySizeValid = True
+										break
+							if(not isArraySizeValid):
+								self.raiseError("array size not valid, no such variable " + attribute.arraySize)
+
 							nextword = self.nextword()
 							if(nextword.content != "]"):
 								self.raiseError("char[] syntax error, require \"]\", find " + nextword.content)

@@ -6,6 +6,22 @@ from genericpath import exists
 import os
 from io import StringIO
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+ 
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+ 
+    return False
+
 class Const(object):
     Cfg = None
     PacketDefine = None

@@ -35,7 +35,7 @@ class Word(object):
         self.type = type
         self.content = content
         self.line = line
-        self.lineoffset = lineoffset
+        self.lineoffset = lineoffset - len(content)
 
 class Lexer(object):
     def __init__(self, fileName, intput):

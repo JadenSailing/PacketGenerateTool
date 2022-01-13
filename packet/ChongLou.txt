@@ -9,7 +9,7 @@ msg cg CGChongLou
 //重楼返回
 msg gc GCChongLou
 {
-	struct Info
+	struct Element
 	{
 		byte equipPos
 		byte state
@@ -17,5 +17,5 @@ msg gc GCChongLou
 	
 	int syncType = 0 //推送原因（0=查询列表，1=打造，2=觉醒，3=继承）
 	byte listCount = 0 //返回的装备个数，如果是更新可能只有一个	
-	Info[listCount] listArray //返回的装备详细信息
+	Element[listCount] listArray //返回的装备详细信息
 }
