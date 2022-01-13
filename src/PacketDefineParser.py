@@ -86,6 +86,9 @@ class PacketDefine(object):
             return self.defineDict[packetName].id
         return 0
 
+    def getDefineDict(self):
+        return self.defineDict
+
     def isPacketValid(self, packetName):
         if(not (packetName in self.defineDict)):
             return False

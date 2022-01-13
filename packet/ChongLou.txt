@@ -13,6 +13,7 @@ msg gc GCChongLou
 	{
 		byte equipPos
 		byte state
+		byte quality
 	}
 	
 	int syncType = 0 //推送原因（0=查询列表，1=打造，2=觉醒，3=继承）

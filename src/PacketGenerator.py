@@ -7,6 +7,7 @@ from .PacketParser import *
 from .Const import *
 from .LuaPacketoutput import *
 from .PacketDefineParser import *
+from .AutoIDListoutput import *
 
 def exportPacketList():
 	cfg = Const.Cfg
@@ -30,8 +31,12 @@ def exportPacketList():
 	with open(filePath, "r", encoding="utf-8") as file:
 		content = file.read()
 	Const.PacketDefine.Parse(content)
+	output = LuaPacketDefineOutput(Const.PacketDefine).generateOutput()
+	with open(os.path.join(outputDir, "PacketIDAutoList" + Const.LuaFileExtention), "w", encoding = "utf-8") as file:
+		file.write(output)
 	#print("cg chonglou id = " + Const.PacketDefine.getPacketID("CGChongLou"))
 
+	outputDir = os.path.join(outputDir, "AutoGenerate")
 	fNum = 0
 	pNum = 0
 	for filePath in validFiles:
