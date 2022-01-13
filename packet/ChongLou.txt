@@ -1,27 +1,21 @@
 //重楼装备操作
-cg message CGChongLou
+msg cg CGChongLou
 {
-	author = "LiuZhen"
-	id = 3108 //消息id
-	dir = "Packet/Request/ChongLou" //生成文件夹
 	int operateType = 0 //操作类型（0=查询列表，1=打造， 2=觉醒， 3=继承）
 	int equipPos = 0 //装备位
 	int bagPos = 0 //背包位 继承时使用
 }
 
 //重楼返回
-gc message GCChongLou
+msg gc GCChongLou
 {
-	author = "LiuZhen"
-	id = 3119 //消息id
-	dir = "Packet/Response/ChongLou" //生成文件夹
-	struct info
+	struct Info
 	{
 		byte equipPos
 		byte state
 	}
-	int syncType = 0 //推送原因（0=查询列表，1=打造，2=觉醒，3=继承）
-	byte listCount = 0 //返回的装备个数，如果是更新可能只有一个
 	
-	info[listCount] listArray //返回的装备详细信息
+	int syncType = 0 //推送原因（0=查询列表，1=打造，2=觉醒，3=继承）
+	byte listCount = 0 //返回的装备个数，如果是更新可能只有一个	
+	Info[listCount] listArray //返回的装备详细信息
 }

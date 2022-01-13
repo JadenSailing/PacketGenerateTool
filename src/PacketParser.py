@@ -6,7 +6,7 @@ import os
 import time
 from io import StringIO
 from .Const import *
-from .Lexer import *
+from .PacketLexer import *
 
 '''
 //测试发送消息
@@ -126,6 +126,11 @@ class JPacket(object):
 		self.backword()
 	
 	def parsePacketTitle(self):
+		msgWord = self.nextword()
+		if(msgWord.content != "msg"):
+			self.raiseError("require \"msg\", get \"%s\"" + msgWord.content)
+			return
+
 		typeWord = self.nextword()
 		if(typeWord.content == "cg"):
 			self.currentItem.type = Const.PacketType_CG
@@ -133,14 +138,8 @@ class JPacket(object):
 			self.currentItem.type = Const.PacketType_GC
 		else:
 			self.raiseError("require \"cg\" or \"gc\", get \"%s\"" % typeWord.content)
-		
-		msgWord = self.nextword()
-		if(msgWord.content != "message"):
-			self.raiseError("require \"message\", get \"%s\"" + msgWord.content)
-			return
-		
 		self.currentItem.name = self.nextword().content
-		
+		self.currentItem.id = Const.PacketDefine.getPacketID(self.currentItem.name)
 		
 	def parseLeftBrace(self):
 		word = self.nextword()
@@ -206,6 +205,16 @@ class JPacket(object):
 					nextword = self.nextword()
 					if(nextword.content == "="):
 						self.currentItem.author = self.nextword().content
+					else:
+						self.raiseError("message dir format error, require dir value, get \"%s\"" % nextword.content)
+				elif(tword.content == "type"):
+					nextword = self.nextword()
+					if(nextword.content == "="):
+						nextword = self.nextword().content
+						if(nextword == "CG"):
+							self.currentItem.type = Const.PacketType_CG
+						else:
+							self.currentItem.type = Const.PacketType_GC
 					else:
 						self.raiseError("message dir format error, require dir value, get \"%s\"" % nextword.content)
 				else:

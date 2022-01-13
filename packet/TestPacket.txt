@@ -1,5 +1,5 @@
 //测试发送消息
-cg message CGTest
+msg cg CGTest
 {
 	id = 2001 //消息id
 	dir = Test //生成文件夹
@@ -33,7 +33,7 @@ cg message CGTest
 }
 
 //测试返回消息
-gc message GCTest
+msg gc GCTest
 {
 	id = 2002
 	dir = Test

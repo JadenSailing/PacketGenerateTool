@@ -3,9 +3,10 @@
 # PacketGenerator
 
 import os
-from .Parser import *
+from .PacketParser import *
 from .Const import *
 from .LuaPacketoutput import *
+from .PacketDefineParser import *
 
 def exportPacketList():
 	cfg = Const.Cfg
@@ -22,8 +23,21 @@ def exportPacketList():
 	fileList = []
 	
 	print("start generating ...")
+	#处理PacketDefine
+	Const.PacketDefine = PacketDefine()
+	content = ""
+	filePath = os.path.join(Const.ParentDir, Const.PacketPath, Const.PacketDefinePath)
+	with open(filePath, "r", encoding="utf-8") as file:
+		content = file.read()
+	Const.PacketDefine.Parse(content)
+	print("cg chonglou id = " + Const.PacketDefine.getPacketID("CGChongLou"))
+
+	fNum = 0
 	pNum = 0
 	for filePath in validFiles:
+		if(Const.PacketDefinePath in filePath):
+			continue
+		fNum = fNum + 1
 		slashIndex = filePath.rfind("\\")
 		fileName = filePath[slashIndex + 1 :]
 		commentName = fileName[:-4]
@@ -53,4 +67,4 @@ def exportPacketList():
 			with open(os.path.join(outDir, item.name + Const.LuaFileExtention), "w", encoding = "utf-8") as file:
 				file.write(output)
 
-	print("complete! file num = %s, message num = %s" % (len(validFiles), pNum))
+	print("complete! file num = %s, message num = %s" % (fNum, pNum))

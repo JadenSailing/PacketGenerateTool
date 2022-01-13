@@ -1,0 +1,4 @@
+//重楼装备操作
+CGChongLou = 3108
+//重楼返回
+GCChongLou = 3119

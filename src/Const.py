@@ -4,12 +4,15 @@
 
 from genericpath import exists
 import os
+from io import StringIO
 
 class Const(object):
     Cfg = None
+    PacketDefine = None
     ParentDir = ""
     PacketPath = "packet"
     OutputPath = "output"
+    PacketDefinePath = "_PacketDefine.txt"
 
     PacketFileExtention = ".txt"
     LuaFileExtention = ".lua"
