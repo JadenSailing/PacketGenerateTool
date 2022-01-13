@@ -100,7 +100,8 @@ class JPacket(object):
 			
 			self.parseRightBrace()
 			
-			self.packetList.append(self.currentItem)
+			if(Const.PacketDefine.isPacketValid(self.currentItem.name)):
+				self.packetList.append(self.currentItem)
 
 	def isEnd(self):
 		if(self.wordIndex == len(self.lexer.wordList) - 1):

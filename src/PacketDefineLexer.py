@@ -19,7 +19,7 @@ class Word(object):
         self.type = type
         self.content = content
         self.line = line
-        self.lineoffset = lineoffset
+        self.lineoffset = lineoffset - len(content)
 
 class Lexer(object):
     def __init__(self, intput):
@@ -44,12 +44,18 @@ class Lexer(object):
                     self.wordList.append(Word(Const.Word_Type_Comment, self.read2LineEnd(), self.line, self.lineoffset))
                 else:
                     self.raiseError("require \"/\", get \"%s\"" % ch)
+            elif(ch == "{"):
+                self.wordList.append(Word(Const.Word_Type_SYMBOL, "{", self.line, self.lineoffset))
+            elif(ch == "}"):
+                self.wordList.append(Word(Const.Word_Type_SYMBOL, "}", self.line, self.lineoffset))
             elif(ch == "="):
                 self.wordList.append(Word(Const.Word_Type_SYMBOL, "=", self.line, self.lineoffset))
-            else:
+            elif(self.isWordCh(ch)):
                 self.backch()
                 commonWord = self.readWord()
                 self.wordList.append(Word(Const.Word_Type_SYMBOL, commonWord, self.line, self.lineoffset))
+            else:
+                continue
 
     def raiseError(self, errorStr):
         raise ValueError(errorStr + "[line]: " + str(self.line) + ", offset = " + str(self.lineoffset) + ",[file]: " + self.fileName)
