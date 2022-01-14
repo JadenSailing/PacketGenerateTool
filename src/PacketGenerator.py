@@ -57,19 +57,19 @@ def exportPacketList():
 		for item in pList:
 			pNum = pNum + 1
 			pLua = LuaPacketOutput(item)
-			output = pLua.generateOutput()
+			outputLua = pLua.generateOutput()
 			print("\tmessage " + item.name)
-			outDir = ""
+			outDirLua = ""
 			if(len(item.dir) > 0):
-				outDir = os.path.join(outputDir, item.dir)
+				outDirLua = os.path.join(outputDir, item.dir)
 				#需要逐层添加路径
-				Util.CreateDirRecursive(outDir)
+				Util.CreateDirRecursive(outDirLua)
 			else:
-				outDir = os.path.join(outputDir)
+				outDirLua = os.path.join(outputDir)
 
-			if(not os.path.exists(outDir)):
-				os.mkdir(outDir)
-			with open(os.path.join(outDir, item.name + Const.LuaFileExtention), "w", encoding = "utf-8") as file:
-				file.write(output)
+			if(not os.path.exists(outDirLua)):
+				os.mkdir(outDirLua)
+			with open(os.path.join(outDirLua, item.name + Const.LuaFileExtention), "w", encoding = "utf-8") as file:
+				file.write(outputLua)
 
 	print("complete! file num = %s, message num = %s" % (fNum, pNum))
