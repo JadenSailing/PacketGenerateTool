@@ -7,7 +7,7 @@ from .PacketParser import *
 from .Const import *
 from .LuaPacketoutput import *
 from .PacketDefineParser import *
-from .AutoIDListoutput import *
+from .LuaAutoIDListoutput import *
 
 def exportPacketList():
 	cfg = Const.Cfg
