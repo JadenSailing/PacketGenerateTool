@@ -24,6 +24,7 @@ def exportPacketList():
 	fileList = []
 	
 	print("start generating ...")
+	########################################
 	#处理PacketDefine
 	Const.PacketDefine = PacketDefine()
 	content = ""
@@ -31,11 +32,14 @@ def exportPacketList():
 	with open(filePath, "r", encoding="utf-8") as file:
 		content = file.read()
 	Const.PacketDefine.Parse(content)
+
+	#Lua前端PacketIDList
 	output = LuaPacketDefineOutput(Const.PacketDefine).generateOutput()
 	with open(os.path.join(outputDir, "PacketIDAutoList" + Const.LuaFileExtention), "w", encoding = "utf-8") as file:
 		file.write(output)
-	#print("cg chonglou id = " + Const.PacketDefine.getPacketID("CGChongLou"))
 
+	########################################
+	#处理各消息生成
 	outputDir = os.path.join(outputDir, "AutoGenerate")
 	fNum = 0
 	pNum = 0

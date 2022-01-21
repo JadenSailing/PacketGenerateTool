@@ -1,9 +1,6 @@
 //测试发送消息
 msg cg CGTest
 {
-	id = 2001 //消息id
-	dir = Test //生成文件夹
-	
 	struct item //item结构
 	{
 		int id
@@ -35,9 +32,6 @@ msg cg CGTest
 //测试返回消息
 msg gc GCTest
 {
-	id = 2002
-	dir = Test
-	
 	struct item //item结构
 	{
 		int id
