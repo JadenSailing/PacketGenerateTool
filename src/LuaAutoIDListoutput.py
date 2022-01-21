@@ -40,8 +40,9 @@ class LuaPacketDefineOutput(object):
         #[3119]		=	"Packet/AutoGenerate/GCChongLou",
         defineDict = Const.PacketDefine.getDefineDict()
         for item in defineDict.values():
-            outputItem = LuaPacketDefineItemStructOutput(item)
-            outStrList.append(outputItem.generateOutput())
+            if(Const.PacketDefine.isPacketValid(item.name)):
+                outputItem = LuaPacketDefineItemStructOutput(item)
+                outStrList.append(outputItem.generateOutput())
         outStrList.append("}")
         outStrList.append("return autoList")
         outStr = ""

@@ -2,8 +2,10 @@
 //{Message = 1000, valid = 0} valid=0表示不自动生成该协议
 
 //测试消息
-{CGTest = 1001}
-{GCTest = 1002}
+{CGTest = 1001, valid = 0}
+{GCTest = 1002, valid = 0}
+
+//以下开始配置协议...
 
 //重楼装备操作
 {CGChongLou = 3108}
