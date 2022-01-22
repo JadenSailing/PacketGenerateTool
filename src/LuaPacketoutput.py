@@ -178,11 +178,11 @@ class LuaPacketAttributeOutput(object):
                 outStrList.append(prefix + "self.%s = {}" % (self.attribute.dataName))
                 if(is_number(self.attribute.arraySize)):
                     outStrList.append(prefix + "for i = 1, %s do" % self.attribute.arraySize)
-                    outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self.%s()" % (self.attribute.dataName, "i", commonData["read"]))
+                    outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:%s()" % (self.attribute.dataName, "i", commonData["read"]))
                     outStrList.append(prefix + "end")
                 else:
                     outStrList.append(prefix + "for i = 1, self.%s do" % self.attribute.arraySize)
-                    outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self.%s()" % (self.attribute.dataName, "i", commonData["read"]))
+                    outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:%s()" % (self.attribute.dataName, "i", commonData["read"]))
                     outStrList.append(prefix + "end")
                 pass
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_charArray):
@@ -232,7 +232,10 @@ class LuaPacketOutput(object):
 
         #属性默认值
         for attribute in self.packet.attributes:
-            outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateDefault())
+            defaultAttrStr = LuaPacketAttributeOutput(attribute, self.packet).generateDefault()
+            if(len(defaultAttrStr) > 0):
+                outStrList.append(defaultAttrStr)
+                pass
         outStrList.append("end\n")
 
         #写入

@@ -62,7 +62,9 @@ class PacketDefine(object):
         if(w3.type != Const.Word_Type_SYMBOL):
             self.raiseError("require packet id, get \"%s\"" % w3.content)
         if(self.existSameID(w3.content)):
-            self.raiseError("same packet id %s" % w3.content)
+            #可能有重复
+            #self.raiseError("same packet id %s" % w3.content)
+            pass
         self.defineDict[w1.content] = PacketDefineItem(w1.content, w3.content)
         #分隔符
         w4 = self.nextword()

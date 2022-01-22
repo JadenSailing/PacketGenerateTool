@@ -11,3 +11,7 @@
 {CGChongLou = 3108}
 //重楼返回
 {GCChongLou = 3119}
+//INT测试发送
+{CGTestStream = 3186}
+//INT测试返回
+{GCTestStream = 3186}

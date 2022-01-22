@@ -1,0 +1,29 @@
+//测试stream发送
+msg cg CGTestStream
+{
+	author = LiuZhen
+	
+	byte[10] byte1
+	byte[10] byte2
+	short[10] short1
+	ushort[10] short2
+	int[10] int1
+	uint[10] int2
+	int64[10] long1
+	uint64[10] long2
+}
+
+//测试stream返回
+msg gc GCTestStream
+{
+	author = LiuZhen
+	
+	byte[10] byte1
+	byte[10] byte2
+	short[10] short1
+	ushort[10] short2
+	int[10] int1
+	uint[10] int2
+	int64[10] long1
+	uint64[10] long2
+}
