@@ -315,6 +315,13 @@ class JPacket(object):
 					attribute.dataValue = self.nextword().content
 					inCase = True
 					pass
+				elif(tword.content == "casenot"):
+					#case条件判定
+					attribute.dataType = Const.Packet_Attribute_Type_Case_Not_Start
+					attribute.dataName = self.nextword().content
+					attribute.dataValue = self.nextword().content
+					inCase = True
+					pass
 				elif(tword.content == "endcase"):
 					#case条件判定
 					attribute.dataType = Const.Packet_Attribute_Type_Case_End
@@ -331,6 +338,7 @@ class JPacket(object):
 							attribute.dataType = Const.Packet_Attribute_Type_structArray
 							attribute.dataStructName = tword.content
 							attribute.arraySize = self.nextword().content
+							isArraySizeValid = True
 							if(not is_number(attribute.arraySize)):
 								#非固定数字长度数组 检测一下变量是否合法
 								isArraySizeValid = False

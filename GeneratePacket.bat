@@ -1,3 +1,3 @@
 set python="Python38/python.exe"
-python PacketToolsEntry.py
+%python% PacketToolsEntry.py
 pause

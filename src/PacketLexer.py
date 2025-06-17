@@ -129,6 +129,8 @@ class Lexer(object):
             return True
         if(chOrd == ord(".")):
             return True
+        if(chOrd == ord("-")):
+            return True
         return False
 
     def readWord(self):

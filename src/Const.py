@@ -76,6 +76,7 @@ class Const(object):
     #特殊属性 Case条件
     Packet_Attribute_Type_Case_Start = 25
     Packet_Attribute_Type_Case_End = 26
+    Packet_Attribute_Type_Case_Not_Start = 27
     
 
     
@@ -92,8 +93,8 @@ class Util(object):
         {"symbol" : "uint",     "type" : Const.Packet_Attribute_Type_uint, "aType" : Const.Packet_Attribute_Type_uintArray, "read" : "ReadUInt32", "write" : "WriteUInt32", "dvalue" : 0},
         {"symbol" : "short",    "type" : Const.Packet_Attribute_Type_short, "aType" : Const.Packet_Attribute_Type_shortArray, "read" : "ReadInt16", "write" : "WriteInt16", "dvalue" : 0},
         {"symbol" : "ushort",   "type" : Const.Packet_Attribute_Type_ushort, "aType" : Const.Packet_Attribute_Type_ushortArray, "read" : "ReadUInt16", "write" : "WriteUInt16", "dvalue" : 0},
-        {"symbol" : "int64",    "type" : Const.Packet_Attribute_Type_int64, "aType" : Const.Packet_Attribute_Type_int64Array, "read" : "ReadRealInt64", "write" : "WriteRealInt64", "dvalue" : 0},
-        {"symbol" : "uint64",   "type" : Const.Packet_Attribute_Type_uint64, "aType" : Const.Packet_Attribute_Type_uint64Array, "read" : "ReadRealUInt64", "write" : "WriteRealUInt64", "dvalue" : 0},
+        {"symbol" : "int64",    "type" : Const.Packet_Attribute_Type_int64, "aType" : Const.Packet_Attribute_Type_int64Array, "read" : "ReadInt64", "write" : "WriteInt64", "dvalue" : 0},
+        {"symbol" : "uint64",   "type" : Const.Packet_Attribute_Type_uint64, "aType" : Const.Packet_Attribute_Type_uint64Array, "read" : "ReadUInt64", "write" : "WriteUInt64", "dvalue" : 0},
         {"symbol" : "byte",     "type" : Const.Packet_Attribute_Type_byte, "aType" : Const.Packet_Attribute_Type_byteArray, "read" : "ReadByte", "write" : "WriteByte", "dvalue" : 0},
         {"symbol" : "float",    "type" : Const.Packet_Attribute_Type_float, "aType" : Const.Packet_Attribute_Type_floatArray, "read" : "ReadSingle", "write" : "WriteSingle", "dvalue" : 0},
         {"symbol" : "double",   "type" : Const.Packet_Attribute_Type_double, "aType" : Const.Packet_Attribute_Type_doubleArray, "read" : "ReadDouble", "write" : "WriteDouble", "dvalue" : 0},

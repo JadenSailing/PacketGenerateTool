@@ -145,6 +145,15 @@ class LuaPacketAttributeOutput(object):
                 outStrList.append(prefix + "self:WriteCharArray(self.%s, %s, true, true)" % (self.attribute.dataName, self.attribute.arraySize))
             else:
                 outStrList.append(prefix + "self:WriteCharArray(self.%s, self.%s, true, true)" % (self.attribute.dataName, self.attribute.arraySize))
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_Start):
+            outStrList.append(prefix + "if self.%s == %s then" % (self.attribute.dataName, self.attribute.dataValue))
+            pass
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_Not_Start):
+            outStrList.append(prefix + "if self.%s ~= %s then" % (self.attribute.dataName, self.attribute.dataValue))
+            pass
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_End):
+            outStrList.append(prefix + "end")
+            pass
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_struct):
             outStrList.append(LuaPacketStructOutput(self.attribute, self.packetItem).generateWrite(prefix, self.attribute.dataName, 0))
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_structArray):
@@ -193,6 +202,9 @@ class LuaPacketAttributeOutput(object):
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_Start):
             outStrList.append(Const.Table_Str + "if self.%s == %s then" % (self.attribute.dataName, self.attribute.dataValue))
             pass
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_Not_Start):
+            outStrList.append(Const.Table_Str + "if self.%s ~= %s then" % (self.attribute.dataName, self.attribute.dataValue))
+            pass
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_End):
             outStrList.append(Const.Table_Str + "end")
             pass
@@ -231,17 +243,30 @@ class LuaPacketOutput(object):
         outStrList.append(Const.Table_Str + "self:SetupGameServerPacket(%s)" % (self.packet.id))
 
         #属性默认值
+        # 在循环开始前创建一个空集合来记录已处理的dataName
+        processed_data_names = set()
+
         for attribute in self.packet.attributes:
+            # 检查当前attribute的dataName是否已经处理过
+            if attribute.dataName in processed_data_names:
+                continue  # 如果已经处理过，跳过当前attribute
+            
             defaultAttrStr = LuaPacketAttributeOutput(attribute, self.packet).generateDefault()
-            if(len(defaultAttrStr) > 0):
+            if len(defaultAttrStr) > 0:
                 outStrList.append(defaultAttrStr)
-                pass
+            
+            # 将当前attribute的dataName添加到已处理集合中
+            processed_data_names.add(attribute.dataName)
+
         outStrList.append("end\n")
 
         #写入
         outStrList.append("function %s:WriteStream()" % (self.packet.name))
         for attribute in self.packet.attributes:
-            outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateWrite(Const.Table_Str))
+            prefix = Const.Table_Str
+            if(attribute.inCase):
+                prefix = Const.Table_Str + Const.Table_Str
+            outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateWrite(prefix))
 
         outStrList.append(Const.Table_Str + "if(AddWatch ~= nil) then")
         outStrList.append(Const.Table_Str + Const.Table_Str + "AddWatch(" + self.packet.author + ")")
