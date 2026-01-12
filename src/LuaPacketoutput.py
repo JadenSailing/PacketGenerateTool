@@ -87,6 +87,15 @@ class LuaPacketStructOutput(object):
                     outStrList.append(prefix + "for %s = 1, self.%s do" % (Const.Index_List[listIndex], attributePrefix + "." + attribute.arraySize))
                     outStrList.append(LuaPacketStructOutput(attribute, self.packetItem).generateRead(prefix + Const.Table_Str, attributePrefix + "." + attribute.dataName + "[" + Const.Index_List[listIndex] + "]", listIndex + 1))
                     outStrList.append(prefix + "end")
+            elif(attribute.dataType == Const.Packet_Attribute_Type_stringArray):
+                if(is_number(attribute.arraySize2)):
+                    outStrList.append(prefix + "for %s = 1, %s do" % (Const.Index_List[listIndex], attribute.arraySize2))
+                    outStrList.append(prefix + Const.Table_Str + "self.%s = self:ReadString(%s)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                    outStrList.append(prefix + "end")
+                else:
+                    outStrList.append(prefix + "for %s = 1, self.%s do" % (Const.Index_List[listIndex], attributePrefix + "." + attribute.arraySize2))
+                    outStrList.append(prefix + Const.Table_Str + "self.%s = self:ReadString(self.%s)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                    outStrList.append(prefix + "end")
 
         outStr = ""
         for i in range(len(outStrList)):
@@ -220,7 +229,16 @@ class LuaPacketAttributeOutput(object):
                 outStrList.append(prefix + "for i = 1, self.%s do" % self.attribute.arraySize)
                 outStrList.append(LuaPacketStructOutput(self.attribute, self.packetItem).generateRead(prefix + Const.Table_Str, self.attribute.dataName + "[i]", 1))
                 outStrList.append(prefix + "end")
-
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_stringArray):
+            outStrList.append(prefix + "self.%s = {}" % (self.attribute.dataName))
+            if(is_number(self.attribute.arraySize2)):
+                outStrList.append(prefix + "for i = 1, %s do" % self.attribute.arraySize2)
+                outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:ReadString(%s)" % (self.attribute.dataName, "i", self.attribute.arraySize))
+                outStrList.append(prefix + "end")
+            else:
+                outStrList.append(prefix + "for i = 1, self.%s do" % self.attribute.arraySize2)
+                outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:ReadString(%s)" % (self.attribute.dataName, "i", self.attribute.arraySize))
+                outStrList.append(prefix + "end")
         outStr = ""
         for i in range(len(outStrList)):
             outStr = outStr + outStrList[i]

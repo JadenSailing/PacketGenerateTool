@@ -1,0 +1,16 @@
+//家具资源CG和GC包（目的：取服务器MD5值做校验）
+msg cg CGHomeBieYeStaticResAsk
+{
+	int op_type 	//0:非法 1:获取所有静态资源MD5
+}
+
+//家具资源CG和GC包（目的：取服务器MD5值做校验）
+//注意：当Res表格里配置的大于128个数据后，1个ResAsk包会回多个ResRet包
+//注意：需要在家园类型的地图上，人物正常进入场景后，发送此消息
+msg gc GCHomeBieYeStaticResRet
+{
+	int op_type		//0:非法 1.返回静态资源MD5
+	int ResSize		//本消息包里有多少个数据（最大值128）
+	int[ResSize] ResType	//资源类型，表格第一列
+	char[32][ResSize] ResMD5	//服务器加载Res时计算出的32位MD5串
+}

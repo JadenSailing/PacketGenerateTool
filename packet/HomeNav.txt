@@ -1,0 +1,18 @@
+//家园nav数据请求
+msg cg CGHomeNavInfoAsk
+{
+	int m_AskType = 0 //操作类型 1-保存版本号和md5
+	int m_nVersionNo //版本号
+	case m_AskType 1
+	char[32] m_szMd5Key //md5
+	endcase
+}
+
+//家园nava数据返回
+msg gc GCHomeNavInfoRet
+{
+	int m_RetType //1-返回版本号
+	case m_RetType 1
+	int m_nVersionNo //版本号
+	endcase
+}

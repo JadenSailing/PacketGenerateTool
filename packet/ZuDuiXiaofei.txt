@@ -1,0 +1,67 @@
+//组队消费操作
+msg cg CGZuDuiXiaoFei
+{
+	byte m_OptType = 0 //操作类型（1请求数据 2免费祈福 3祈福 4创建队伍 5加入队伍 6同意入队 7请求申请列表详细信息 13清空列表
+	byte m_ClientParam = 0 //透传参数 这里与操作类型相同
+	case m_OptType 5
+		char[32] m_JoinKey //队伍口令
+	endcase
+	case m_OptType 6
+		uint64 m_UserGUID //申请人guid
+	endcase
+	case m_OptType 14
+		uint64 m_UserGUID //申请人guid
+	endcase
+}
+
+
+//组队消费数据同步
+msg gc GCZuDuiXiaoFei
+{
+	struct item //item结构
+	{
+		int m_ID
+		int m_LeftCount
+	}
+	struct member //成员信息
+	{
+		uint64 m_GUID
+		char[30] m_szName
+		int m_nTouXiang
+		int m_nTouXiangKuang
+		short m_nMenPai
+		short m_nLevel
+		byte m_nSex
+		int m_nSkillZiTaiType
+		int m_nBattleScore
+		int m_nCostValue //累计幸运值
+		
+	}
+	byte m_OptType = 0	//8 同步组队消费数据 9同步申请列表数据 10同步祈福结果
+	byte m_ClientParam    // 透传参数 即操作类型
+	int m_Season  //当前期数
+	case m_OptType 8 //队伍列表
+		int m_FreeTimes //免费次数
+		int m_UsedTimes //已抽代币次数
+		int m_TeamProgress //队伍进度
+		byte m_ApplyCount //申请列表人数
+		item[8] m_ItemList //剩余物品详细信息
+		byte m_TeamSize //队伍成员信息 为0时表示无队伍
+		member[m_TeamSize] m_Members //队伍详情 第一个是队长
+		char[32] m_JoinKey
+	endcase
+	case m_OptType 9 //申请列表
+		byte m_applySize
+		member[m_applySize] m_ApplyMembers //申请列表
+	endcase
+	case m_OptType 10 //中奖信息
+		byte m_ID
+		int m_FreeTimes //免费次数
+		int m_UsedTimes //已抽代币次数
+		item[8] m_ItemList //剩余物品详细信息
+	endcase
+	case m_OptType 15 //校验是否组队
+		byte m_Res //1成功 其它失败
+		uint64 m_UserGUID //申请人guid
+	endcase
+}

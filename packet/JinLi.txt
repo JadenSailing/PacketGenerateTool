@@ -1,0 +1,57 @@
+//锦鲤操作
+msg cg CGWJinLiOpt
+{
+	int optType = 0 //操作类型（0=获取中奖名单 1抽奖 2通知分享 3下载个人信息 4上传个人信息）
+	case optType 4
+		char[30] realName //真实姓名
+		char[16] realPhoneNumber //真实手机号码
+		char[256] realAddress //真实地址
+	endcase
+}
+
+
+//锦鲤数据同步
+msg gc WGCJinLiOpt
+{
+	struct JinLiPlayerInfo
+	{
+		int64 guid            // 玩家GUID
+		char[30] name // 玩家名字
+		short serverId        // 服务器Id
+		byte lotteryType     // 中奖类型(1：本服大奖，2：全服大奖，无其它值)
+		byte lotteryIdx      // 中奖奖品下标(1 ~ 8，0表示当前暂未抽过，无其它值)
+		uint lotteryTime     // 中奖时间(UNIX本地时间戳)
+	}
+	struct JinLiBaseInfo
+	{
+		byte syncType      // 同步类型(0：进游戏同步，1：信息变更同步，无其它值)
+		byte activityDone  // 是否满足活跃度
+		byte shareDone     // 是否已经分享
+		byte lotteryCount  // 当前抽奖次数
+		byte lotteryIdx    // 中奖奖品下标(1 ~ 8，0表示当前暂未抽过，无其它值)
+	}
+	int optType    // 锦鲤操作类型(详见：enum JinLiOptType)
+    int eventCode  // 锦鲤操作状态码(详见：enum JinLiEventCodeType)
+    case optType 0
+        int playerCount  // 玩家数量
+        JinLiPlayerInfo[playerCount] playerList   // 中奖玩家信息列表
+    endcase
+	case optType 1
+		JinLiBaseInfo baseInfo // 锦鲤基础信息
+	endcase
+	case optType 2
+		JinLiBaseInfo baseInfo // 锦鲤基础信息
+	endcase
+	case optType 11
+		JinLiBaseInfo baseInfo // 锦鲤基础信息
+	endcase
+	case optType 3
+		byte uploadFlag //是否已经上传过个人信息(0：未上传，1：已上传)
+		char[30] realName //真实姓名
+		char[16] realPhoneNumber //真实手机号码
+		char[256] realAddress //真实地址
+	endcase
+	case optType 4
+		byte uploadFlag //是否已经上传过个人信息(0：未上传，1：已上传)
+	endcase
+}

@@ -78,6 +78,8 @@ class Const(object):
     Packet_Attribute_Type_Case_End = 26
     Packet_Attribute_Type_Case_Not_Start = 27
     
+    #string数组
+    Packet_Attribute_Type_stringArray = 28
 
     
     Word_Type_Comment = 1

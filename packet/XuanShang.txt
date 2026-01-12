@@ -1,0 +1,29 @@
+//武林悬赏操作
+msg cg CGReqWuLinXuanShangOpt
+{
+	byte optType = 0 //操作类型（0=查询列表，1=请求， 2=领取， 3=揭榜）
+	byte clientParam = 0 //客户端透传参数
+	int nParam = -1 //默认-1 optType=2 3时 0白银 1黄金 2至尊
+}
+
+//武林悬赏数据同步
+msg gc GCSyncWuLinXuanShangData
+{
+	struct Element
+	{
+		int nSN
+		int nId
+		int nType
+		byte nState
+	}
+	
+	byte optType = 0 //操作类型（0=查询列表，1=请求， 2=领取， 3=揭榜，4=同步）
+	byte clientParam = 0 //客户端透传参数
+	int cfgLevel = 30 //配置活动参与等级
+	int refreshLevel = 30 //跨天刷新时的等级
+	int openDays = 0 //开服天数
+	int curRound = 0 //当前轮次
+	int maxRound = 0 //最大轮次
+	int listCount = 0 //数据数量 可能不为3
+	Element[listCount] listArray //返回的详细数据
+}

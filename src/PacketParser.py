@@ -43,6 +43,7 @@ class JPacketAttribute(object):
 		self.dataStructName = ""
 		self.comment = ""
 		self.arraySize = 0
+		self.arraySize2 = 0
 		pass
 #自定义结构体
 class JPacketStruct(object):
@@ -300,6 +301,18 @@ class JPacket(object):
 						nextword = self.nextword()
 						if(nextword.content != "]"):
 							self.raiseError("char[] syntax error, require \"]\", find " + nextword.content)
+						
+						#string数组新增处理
+						nextword = self.nextword()
+						if(nextword.content == "["):
+							attribute.dataType = Const.Packet_Attribute_Type_stringArray
+							attribute.arraySize2 = self.nextword().content
+							nextword = self.nextword()
+							if(nextword.content != "]"):
+								self.raiseError("string[] syntax error, require \"]\", find " + nextword.content)
+						else:
+							self.backword()
+
 						attribute.dataName = self.nextword().content
 						nextword = self.nextword()
 						if(nextword.content == "="):

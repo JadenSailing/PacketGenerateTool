@@ -11,7 +11,27 @@
 {CGChongLou = 3108}
 //重楼返回
 {GCChongLou = 3119}
+//武林悬赏操作
+{CGReqWuLinXuanShangOpt = 3711}
+//武林悬赏数据同步
+{GCSyncWuLinXuanShangData = 3712}
+//天龙锦鲤操作
+{CGWJinLiOpt = 3719}
+//天龙锦鲤操作返回
+{WGCJinLiOpt = 3720}
 //INT测试发送
-{CGTestStream = 3186}
+//{CGTestStream = 3186}
 //INT测试返回
-{GCTestStream = 3186}
+//{GCTestStream = 3186}
+
+//组队消费
+{CGZuDuiXiaoFei = 3828}
+{GCZuDuiXiaoFei = 3829}
+
+//家园版本
+{CGHomeNavInfoAsk = 3967}
+{GCHomeNavInfoRet = 3968}
+
+//家园操作
+{CGHomeBieYeStaticResAsk = 3971}
+{GCHomeBieYeStaticResRet = 3972}
