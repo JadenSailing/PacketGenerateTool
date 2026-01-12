@@ -35,3 +35,5 @@
 //家园操作
 {CGHomeBieYeStaticResAsk = 3971}
 {GCHomeBieYeStaticResRet = 3972}
+{CGHomePushOperationReq = 3973}
+{GCHomePushOperationRet = 3974}
