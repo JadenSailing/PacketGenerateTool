@@ -81,6 +81,7 @@ class JPacket(object):
 		self.lexer = Lexer(self.fileName, self.packetstr)
 		self.lexer.parse()
 		self.wordIndex = -1
+		self.inCase = 0
 		
 	#处理入口
 	def parse(self):
@@ -97,7 +98,7 @@ class JPacket(object):
 			#消息内自定义结构体列表
 			self.parsePacketStuct()
 			#消息的属性列表，每一条会序列化
-			self.currentItem.attributes = self.parsePacketAttributes()
+			self.currentItem.attributes = self.parsePacketAttributes(self.inCase)
 			
 			self.parseRightBrace()
 			
@@ -239,7 +240,7 @@ class JPacket(object):
 			if(word.content != "{"):
 				self.raiseError("struct require \"{\", get \"%s\"" % word)
 			#struct的属性列表
-			struct.attributes = self.parsePacketAttributes()
+			struct.attributes = self.parsePacketAttributes(self.inCase)
 			self.currentItem.structs.append(struct)
 			tword = self.nextword()
 
@@ -249,13 +250,13 @@ class JPacket(object):
 		self.backword()
 			
 	#获取消息或结构的属性信息，嵌套下会出现递归调用
-	def parsePacketAttributes(self):
+	def parsePacketAttributes(self, inCase):
+		self.inCase = inCase
 		tword = self.nextword()
 		attributeList = []
-		inCase = False
 		while(not self.isEnd()):
 			attribute = JPacketAttribute()
-			attribute.inCase = inCase
+			attribute.inCase = self.inCase
 			attribute.dataType = Const.Packet_Attribute_Type_invalid
 			if(tword.type != Const.Word_Type_Comment):
 				commonData = Util.GetCommonDataBySymbol(tword.content)
@@ -319,6 +320,16 @@ class JPacket(object):
 							attribute.dataValue = self.nextword().content
 						else:
 							self.backword()
+				elif(tword.content == "bytes"):
+					attribute.dataType = Const.Packet_Attribute_Type_Bytes
+					nextword = self.nextword()
+					if(nextword.content == "["):
+						attribute.arraySize = self.nextword().content
+						nextword = self.nextword()
+						if(nextword.content != "]"):
+							self.raiseError("bytes[] syntax error, require \"]\", find " + nextword.content)
+						attribute.dataName = self.nextword().content
+					pass
 				elif(tword.content == "}"):
 					break
 				elif(tword.content == "case"):
@@ -326,20 +337,20 @@ class JPacket(object):
 					attribute.dataType = Const.Packet_Attribute_Type_Case_Start
 					attribute.dataName = self.nextword().content
 					attribute.dataValue = self.nextword().content
-					inCase = True
+					self.inCase = self.inCase + 1
 					pass
 				elif(tword.content == "casenot"):
 					#case条件判定
 					attribute.dataType = Const.Packet_Attribute_Type_Case_Not_Start
 					attribute.dataName = self.nextword().content
 					attribute.dataValue = self.nextword().content
-					inCase = True
+					self.inCase = self.inCase + 1
 					pass
 				elif(tword.content == "endcase"):
 					#case条件判定
 					attribute.dataType = Const.Packet_Attribute_Type_Case_End
-					inCase = False
-					attribute.inCase = False
+					self.inCase = self.inCase - 1
+					attribute.inCase = self.inCase
 					pass
 				else:
 					#此处可能是自定义结构

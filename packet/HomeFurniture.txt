@@ -1,0 +1,220 @@
+//家居相关操作
+msg cg CGWHomeFurnitureAsk
+{
+	struct FurnitureItem //家居结构
+	{
+		ushort m_nTabID //家具ID
+		ushort m_nCount //家具数量
+		ushort m_nPos //家具位置
+	}
+	int64 m_UserGUID	//用户GUID
+	int	m_AskType	//0无效 1请求背包 2拓印解锁 3图纸解锁 4家居回收 5已摆放家具列表 6家居拆分 7摆放家具(可能影响仓库数量) 8回收家具到仓库 9请求模板列表 10解锁模板 11修改模板 12保存模板 13应用模板 14删除模板 15返回新的地表版本号 16返回保存成功的地表版本号（广播）17返回设置地表id 18返回水面信息 19返回地形版本号 20广播应用模板 21重置地表
+	case m_AskType 1
+		
+	endcase
+	case m_AskType 2
+		ushort m_nTabID //家具ID
+	endcase
+	case m_AskType 3
+		ushort m_nTabID //家具ID
+	endcase
+	case m_AskType 4
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //家具列表
+	endcase
+	case m_AskType 5
+	endcase
+	case m_AskType 6
+		FurnitureItem item
+		int m_OutCount = 1
+	endcase
+	case m_AskType 7
+	endcase
+	case m_AskType 8
+	endcase
+	case m_AskType 9
+	endcase
+	case m_AskType 10
+		int m_nTempIndex //模板索引
+	endcase
+	case m_AskType 11
+		int m_nTempIndex //模板索引
+		char[13] m_szTempName //模板名称
+		char[121] m_szTempDesc //模板描述
+	endcase
+	case m_AskType 12
+		int m_nTempIndex //模板索引
+		char[13] m_szTempName //模板名称
+		char[121] m_szTempDesc //模板描述
+		int[4] m_nPhotoMD5 //缩略图md5
+	endcase
+	case m_AskType 13
+		int m_nTempIndex //模板索引
+		byte m_byOfficial //官方模板
+	endcase
+	case m_AskType 14
+		int m_nTempIndex //模板索引
+	endcase
+	case m_AskType 21
+	endcase
+}
+
+msg gc WGCHomeFurnitureRet
+{
+	struct FurnitureItem //家居结构
+	{
+		ushort m_nTabID //家具ID
+		ushort m_nCount //家具数量
+		ushort m_nPos //家具位置
+	}
+	struct HomeItem //摆放家具结构
+	{
+		int64 m_nGUID64 //家具GUID
+		ushort m_nTabID //家具ID
+		float m_fAnchorX //锚点X
+		float m_fAnchorY //锚点Y
+		float m_fAnchorZ //锚点Z
+		float m_fYaw //旋转角度
+		float m_fScale //缩放
+	}
+
+	struct TempFurnitureItem //模板家具结构
+	{
+		ushort m_nTabID //家具ID
+		float m_fAnchorX //锚点X
+		float m_fAnchorY //锚点Y
+		float m_fAnchorZ //锚点Z
+		float m_fYaw //旋转角度
+		float m_fScale //缩放
+	}
+
+	struct Build_Template_Item //模板结构
+	{
+		byte m_nIndex //模板索引
+		byte m_nHomeLevel //模板等级
+		byte m_byFlag //模板标志 1是否已解锁，2是否已分享 3是否可分享
+		uint m_uSaveTime //保存时间
+		char[13] m_szTempName //模板名称
+		char[121] m_szTempDesc //模板描述
+		float m_fWaterLevel //水线
+		int m_nNavVersion //地形版本号
+		int m_nTerrVersion //地表版本号
+		byte[4] m_byTerrainIDs //地表贴图
+		int[4] m_nPhotoMD5 //缩略图md5
+		short m_nCount //家具数量
+		TempFurnitureItem[m_nCount] m_ItemList //家具列表
+	}
+
+	short m_PlayerID	//用户GUID
+	int	m_RetType	//0无效 1返回背包 2拓印解锁 3图纸解锁 4家居回收 5已摆放家具列表 6家居拆分 7摆放家具(可能影响仓库数量) 8回收家具到仓库 9请求模板列表 10解锁模板 11修改模板 12保存模板 13应用模板 14删除模板 15返回新的地表版本号 16返回保存成功的地表版本号（广播）17返回设置地表id 18返回水面信息 19返回地形版本号 20广播应用模板 21重置地表
+	case m_RetType 1
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //家具列表
+	endcase
+	case m_RetType 2
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //家具列表
+	endcase
+	case m_RetType 3
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //家具列表
+	endcase
+	case m_RetType 4
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //家具列表
+	endcase
+	case m_RetType 5
+		int m_nItemCount 
+		HomeItem[m_nItemCount] m_ItemList //家具列表
+		int m_nNavVersion //地形版本号
+		int m_nTerrVersion //地表版本号
+		byte m_byUserWater //是否使用水面
+		float m_fWaterLevel //水线
+		byte[4] m_byTerrainIDs //地表贴图
+	endcase
+	case m_RetType 6
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //家具列表 只会有两个
+	endcase
+	case m_RetType 7
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //摆放
+	endcase
+	case m_RetType 8
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //回收仓库
+	endcase
+	case m_RetType 9
+		int m_TempSize //模板数量
+		Build_Template_Item[m_TempSize] m_TempList //模板详情
+	endcase
+	case m_RetType 10
+		Build_Template_Item item //解锁
+	endcase
+	case m_RetType 11
+		Build_Template_Item item //修改
+	endcase
+	case m_RetType 12
+		Build_Template_Item item //保存
+	endcase
+	case m_RetType 13
+		Build_Template_Item item //应用
+		int m_nItemCount 
+		FurnitureItem[m_nItemCount] m_ItemList //背包家具列表
+		byte m_byOfficial //是否官方模板
+	endcase
+	case m_RetType 14
+		Build_Template_Item item //删除
+	endcase
+	case m_RetType 15
+		int64 m_OwnerGUID
+		int m_nTerrVersion
+	endcase
+	case m_RetType 16
+		int64 m_OperGUID
+		int64 m_OwnerGUID
+		int m_nTerrVersion
+	endcase
+	case m_RetType 17
+		int64 m_OperGUID
+		int64 m_OwnerGUID
+		byte[4] m_byTerrainIDs
+	endcase
+	case m_RetType 18
+		int m_SceneID
+		int64 m_OperGUID
+		int64 m_OwnerGUID
+		byte m_byUserWater
+		float m_fWaterLevel
+	endcase
+	case m_RetType 19
+		int m_SceneID
+		int64 m_OperGUID
+		int64 m_OwnerGUID
+		int m_nNavVersion
+	endcase
+	case m_RetType 20
+		int m_SceneID
+		int64 m_OperGUID
+		int64 m_OwnerGUID
+		byte m_byUserWater
+		float m_fWaterLevel
+		int m_nNavVersion
+		int m_nTerrVersion
+		byte[4] m_byTerrainIDs
+	endcase
+	case m_RetType 21
+		int64 m_OperGUID
+		int64 m_OwnerGUID
+		int m_nTerrVersion
+		byte m_byUserWater
+		float m_fWaterLevel
+		byte[4] m_byTerrainIDs
+	endcase
+}
+
+msg cg CGWHomeFurnitureOper
+{
+	int64 m_UserGUID	//用户GUID
+	endcase
+}

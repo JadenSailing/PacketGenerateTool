@@ -18,36 +18,53 @@ msg gc GCHomeBieYeStaticResRet
 //家具摆放CG
 msg cg CGHomePushOperationReq
 {
-	int	op_type	//0:非法 1:只添加 2:只删除 3:既添加又删除 4:清空地图所有摆放
-	case op_type 1 //只添加
+	struct add_item //添加家具结构
+	{
+		int objTypeAdd
+		int isFurniture
+		float anchorX
+		float anchorY
+		float anchorZ
+		float yaw
+		float scale
+		int client_param
+		int64 nGuidAdd
+	}
+	struct del_item //删除家具结构
+	{
+		int objTypeDel
+		int64 nGuidDel
+	}
+	int	op_type	//0:非法 1:建筑相关 2:清空建筑 3:地形相关 4水面调整 5重置地形(会同时删除建筑列表和水面)
+	int64 nHomeGuid = 123456 //家园GUID
+	case op_type 1 //既添加又删除
 		int		addSize			//添加数量（最大值1024）
-		int[addSize]		objType		//资源类型
-		int[addSize]		isFurniture	//是否是家具（0不是，1静态，2动态）
-		float[addSize]		anchorX		//锚点X
-		float[addSize]		anchorY		//锚点Y
-		float[addSize]		anchorZ		//锚点Z
-		float[addSize]		yaw			//yaw
-		int64[addSize]		nGuid		//家具GUID
-	endcase
-	case op_type 2 //只删除
+		add_item[addSize] add_item //添加的家具
 		int		delSize			//删除数量（最大值1024）
-		int[delSize]	objType //资源类型
-		int64[delSize]	nGuid //家具GUID
+		del_item[delSize] del_item //删除的家具
+		byte	useMoney = 1 //是否要购买不存在的家居
+		byte 	isOfficial = 1 //是否是官方模板
+		byte 	index = 255	//模板索引 255表示不使用模板
 	endcase
-	case op_type 3 //既添加又删除
-		int		addSize			//添加数量（最大值1024）
-		int[addSize]		objTypeAdd		//资源类型
-		int[addSize]		isFurniture	//是否是家具（0不是，1静态，2动态）
-		float[addSize]		anchorX		//锚点X
-		float[addSize]		anchorY		//锚点Y
-		float[addSize]		anchorZ		//锚点Z
-		float[addSize]		yaw			//yaw
-		int64[addSize]		nGuidAdd		//家具GUID
-		int		delSize			//删除数量（最大值1024）
-		int[delSize]	objTypeDel //资源类型
-		int64[delSize]	nGuidDel //家具GUID
+	case op_type 2 //清空地图所有摆放
+		//什么也不传
 	endcase
-	case op_type 4 //清空地图所有摆放
+	case op_type 3 //地形相关
+		int curVersion //当前版本号
+		byte isGuanFang //是否是官方模板
+		byte index //模板索引 -1表示不使用模板
+		int needUpdate = 1 //是否需要透传 默认1
+		case index 255
+			char[32] md5 //体素数据md5 不需要的时候不传
+			int navDataSize //体素数据大小
+			bytes[navDataSize] navData //体素数据
+		endcase
+	endcase
+	case op_type 4 //水面调整
+		byte useWater //是否启用水面
+		float waterLevel //水面高度
+	endcase
+	case op_type 5 //重置地形
 		//什么也不传
 	endcase
 }
@@ -55,56 +72,56 @@ msg cg CGHomePushOperationReq
 //家具摆放CG
 msg gc GCHomePushOperationRet
 {
-	int op_type		//0:非法 1:清空地图成功 2:摆放成功（添加/删除/添加+删除） 3:add的数据里有错误 4:del的数据里有错误 -1:清空地图失败 -2:摆放失败
+	struct add_item //添加家具结构
+	{
+		int objTypeAdd
+		int isFurniture
+		float anchorX
+		float anchorY
+		float anchorZ
+		float yaw
+		float scale
+		int client_param
+		int64 nGuidAdd
+	}
+	struct del_item //删除家具结构
+	{
+		int objTypeDel
+		int64 nGuidDel
+	}
+
+	int op_type		//0:非法 1:摆放成功 2:清除建筑成功 3地表 4水位 对应负值均为失败
+	int64 nHomeGuid		//家园GUID
 	int64 nOpUserGuid		//操作者GUID
+	int		nLogicRet		//游戏逻辑处理的返回值	0:非法 1:成功 -1:资源不存在 -2:anchor坐标非法 
+	int		nPushRet		//Push函数的返回值		0:成功 其他:失败
+	int		nApplyRet		//Apply函数的返回值		0:成功 其他:失败
 	case op_type 1
-		int		nResetRet		//DeleteAll函数的返回值	0:成功 其他:失败
-		int		nApplyRet		//Apply函数的返回值		0:成功 其他:失败
+		int		addSize			//添加数量（最大值1024）
+		add_item[addSize] add_item //添加的家具
+		int		delSize			//删除数量（最大值1024）
+		del_item[delSize] del_item //删除的家具
 	endcase
 	case op_type 2
-		int		nLogicRet		//游戏逻辑处理的返回值	0:非法 1:成功 -1:资源不存在 -2:anchor坐标非法 
-		int		nPushRet		//Push函数的返回值		0:成功 其他:失败
-		int		nApplyRet		//Apply函数的返回值		0:成功 其他:失败
+	endcase
+	case op_type 3
+	endcase
+	case op_type 4
+	endcase
+	case op_type 5
+	endcase
+	case op_type -1 //摆放失败
 		int		addSize			//添加数量（最大值1024）
-		int[addSize]		objTypeAdd		//资源类型
-		int[addSize]		isFurniture	//是否是家具（0不是，1静态，2动态）
-		float[addSize]		anchorX		//锚点X
-		float[addSize]		anchorY		//锚点Y
-		float[addSize]		anchorZ		//锚点Z
-		float[addSize]		yaw			//yaw
-		int64[addSize]		nGuidAdd		//家具GUID
+		add_item[addSize] add_item //添加的家具
 		int		delSize			//删除数量（最大值1024）
-		int[delSize]	objTypeDel //资源类型
-		int64[delSize]	nGuidDel //家具GUID
+		del_item[delSize] del_item //删除的家具
 	endcase
-	case op_type 3 //add的数据里有错误
-		int		nLogicRet		//游戏逻辑处理的返回值	0:非法 1:成功 -1:资源不存在 -2:anchor坐标非法 -3资源表上就没找到 -4资源GUID有重复 -5资源GUID有空的
-		int		objType			//添加资源类型
-		int64		nGuid		//家具GUID高32位
+	case op_type -2 //清除建筑失败
 	endcase
-	case op_type 4 //del的数据里有错误
-		int		nLogicRet		//游戏逻辑处理的返回值	0:非法 1:成功 -1:资源不存在 -2:anchor坐标非法 -3资源表上就没找到 -4资源GUID有重复 -5资源GUID有空的
-		int		objType			//删除资源类型
-		int64	nGuid		//家具GUID高32位
+	case op_type -3 //地表失败
 	endcase
-	case op_type -1 //清空地图失败
-		int		nResetRet		//DeleteAll函数的返回值	0:成功 其他:失败
-		int		nApplyRet		//Apply函数的返回值		0:成功 其他:失败
+	case op_type -4 //水位失败
 	endcase
-	case op_type -2 //摆放失败
-		int		nLogicRet		//游戏逻辑处理的返回值	0:非法 1:成功 -1:资源不存在 -2:anchor坐标非法 
-		int		nPushRet		//Push函数的返回值		0:成功 其他:失败
-		int		nApplyRet		//Apply函数的返回值		0:成功 其他:失败
-		int		addSize			//添加数量（最大值1024）
-		int[addSize]		objTypeAdd		//资源类型
-		int[addSize]		isFurniture	//是否是家具（0不是，1静态，2动态）
-		float[addSize]		anchorX		//锚点X
-		float[addSize]		anchorY		//锚点Y
-		float[addSize]		anchorZ		//锚点Z
-		float[addSize]		yaw			//yaw
-		int64[addSize]		nGuidAdd		//家具GUID
-		int		delSize			//删除数量（最大值1024）
-		int[delSize]	objTypeDel //资源类型
-		int64[delSize]	nGuidDel //家具GUID
+	case op_type -5 //重置地形失败
 	endcase
 }

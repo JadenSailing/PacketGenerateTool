@@ -81,6 +81,9 @@ class Const(object):
     #string数组
     Packet_Attribute_Type_stringArray = 28
 
+    #写bytes流
+    Packet_Attribute_Type_Bytes = 29
+
     
     Word_Type_Comment = 1
     Word_Type_String = 2
@@ -101,6 +104,7 @@ class Util(object):
         {"symbol" : "float",    "type" : Const.Packet_Attribute_Type_float, "aType" : Const.Packet_Attribute_Type_floatArray, "read" : "ReadSingle", "write" : "WriteSingle", "dvalue" : 0},
         {"symbol" : "double",   "type" : Const.Packet_Attribute_Type_double, "aType" : Const.Packet_Attribute_Type_doubleArray, "read" : "ReadDouble", "write" : "WriteDouble", "dvalue" : 0},
         {"symbol" : "bool",     "type" : Const.Packet_Attribute_Type_bool, "aType" : Const.Packet_Attribute_Type_boolArray, "read" : "ReadBool", "write" : "WriteBool", "dvalue" : 0},
+        #{"symbol" : "bytes",   "type" : Const.Packet_Attribute_Type_Bytes, "aType" : Const.Packet_Attribute_Type_Bytes, "read" : "ReadBytes", "write" : "WriteBytes", "dvalue" : 0},    
     ]
 
     def GetCommonDataBySymbol(symbol):

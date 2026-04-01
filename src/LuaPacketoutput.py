@@ -31,9 +31,14 @@ class LuaPacketStructOutput(object):
                         outStrList.append(prefix + "end")
             elif(attribute.dataType == Const.Packet_Attribute_Type_charArray):
                 if(is_number(attribute.arraySize)):
-                    outStrList.append(prefix + "self:WriteCharArray(self.%s, %s, true, true)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                    outStrList.append(prefix + "self:WriteCharArray(self.%s, %s, true, false)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
                 else:
-                    outStrList.append(prefix + "self:WriteCharArray(self.%s, self.%s, true, true)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                    outStrList.append(prefix + "self:WriteCharArray(self.%s, self.%s, true, false)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+            elif(attribute.dataType == Const.Packet_Attribute_Type_Bytes):
+                if(is_number(attribute.arraySize)):
+                    outStrList.append(prefix + "self:WriteBytes(self.%s, %s, true, true)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
+                else:
+                    outStrList.append(prefix + "self:WriteBytes(self.%s, self.%s, true, true)" % (attributePrefix + "." + attribute.dataName, attribute.arraySize))
             elif(attribute.dataType == Const.Packet_Attribute_Type_struct):
                 outStrList.append(LuaPacketStructOutput(attribute, self.packetItem).generateWrite(prefix, attributePrefix + "." + attribute.dataName, listIndex))
             elif(attribute.dataType == Const.Packet_Attribute_Type_structArray):
@@ -64,6 +69,7 @@ class LuaPacketStructOutput(object):
                     outStrList.append(prefix + "self.%s = self:%s()" % (attributePrefix + "." + attribute.dataName, commonData["read"]))
                 else:
                     if(is_number(attribute.arraySize)):
+                        outStrList.append(prefix + "self.%s = {}" % (attributePrefix + "." + attribute.dataName))
                         outStrList.append(prefix + "for %s = 1, %s do" % (Const.Index_List[listIndex], attribute.arraySize))
                         outStrList.append(prefix + Const.Table_Str + "self.%s[%s] = self:%s()" % (attributePrefix + "." + attribute.dataName, Const.Index_List[listIndex], commonData["read"]))
                         outStrList.append(prefix + "end")
@@ -79,6 +85,7 @@ class LuaPacketStructOutput(object):
             elif(attribute.dataType == Const.Packet_Attribute_Type_struct):
                 outStrList.append(LuaPacketStructOutput(attribute, self.packetItem).generateRead(prefix, attributePrefix + "." + attribute.dataName, listIndex))
             elif(attribute.dataType == Const.Packet_Attribute_Type_structArray):
+                outStrList.append(prefix + "self.%s = {}" % (attributePrefix + "." + attribute.dataName))
                 if(is_number(attribute.arraySize)):
                     outStrList.append(prefix + "for %s = 1, %s do" % (Const.Index_List[listIndex], attribute.arraySize))
                     outStrList.append(LuaPacketStructOutput(attribute, self.packetItem).generateRead(prefix + Const.Table_Str, attributePrefix + "." + attribute.dataName + "[" + Const.Index_List[listIndex] + "]", listIndex + 1))
@@ -151,9 +158,14 @@ class LuaPacketAttributeOutput(object):
                 pass
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_charArray):
             if(is_number(self.attribute.arraySize)):
-                outStrList.append(prefix + "self:WriteCharArray(self.%s, %s, true, true)" % (self.attribute.dataName, self.attribute.arraySize))
+                outStrList.append(prefix + "self:WriteCharArray(self.%s, %s, true, false)" % (self.attribute.dataName, self.attribute.arraySize))
             else:
-                outStrList.append(prefix + "self:WriteCharArray(self.%s, self.%s, true, true)" % (self.attribute.dataName, self.attribute.arraySize))
+                outStrList.append(prefix + "self:WriteCharArray(self.%s, self.%s, true, false)" % (self.attribute.dataName, self.attribute.arraySize))
+        elif(self.attribute.dataType == Const.Packet_Attribute_Type_Bytes):
+            if(is_number(self.attribute.arraySize)):
+                outStrList.append(prefix + "self:WriteBytes(self.%s, %s)" % (self.attribute.dataName, self.attribute.arraySize))
+            else:
+                outStrList.append(prefix + "self:WriteBytes(self.%s, self.%s)" % (self.attribute.dataName, self.attribute.arraySize))
         elif(self.attribute.dataType == Const.Packet_Attribute_Type_Case_Start):
             outStrList.append(prefix + "if self.%s == %s then" % (self.attribute.dataName, self.attribute.dataValue))
             pass
@@ -282,8 +294,9 @@ class LuaPacketOutput(object):
         outStrList.append("function %s:WriteStream()" % (self.packet.name))
         for attribute in self.packet.attributes:
             prefix = Const.Table_Str
-            if(attribute.inCase):
-                prefix = Const.Table_Str + Const.Table_Str
+            if(attribute.inCase > 0):
+                for i in range(attribute.inCase):
+                    prefix = prefix + Const.Table_Str
             outStrList.append(LuaPacketAttributeOutput(attribute, self.packet).generateWrite(prefix))
 
         outStrList.append(Const.Table_Str + "if(AddWatch ~= nil) then")
